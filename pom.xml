@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com</groupId>
+    <groupId>com.along</groupId>
     <artifactId>spring-boot-all</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -47,6 +47,11 @@
             </plugin>
         </plugins>
     </build>
+
+    <modules>
+        <!-- Spring Boot初始项目搭建，启动Banner设置 -->
+        <module>spring-boot-banner</module>
+    </modules>
 
 
 </project>
