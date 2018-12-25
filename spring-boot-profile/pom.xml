@@ -2,17 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.along</groupId>
-    <artifactId>spring-boot-all</artifactId>
+    <artifactId>spring-boot-profile</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
-
-    <name>spring-boot-all</name>
-    <description>Demo project for Spring Boot</description>
-
-    <!-- 添加Spring Boot的父类依赖，这样当前项目就是Spring Boot项目了。 spring-boot-starter-parent是一个特殊的starter，他用来
-		提供相关的maven默认依赖， 使用它之后，常用的依赖可以省去version标签 -->
+    <name>spring-boot-profile</name>
+    <description>Spring Boot Profile配置</description>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -20,16 +14,38 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <profileActive>dev</profileActive>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profileActive>prod</profileActive>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <profileActive>test</profileActive>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <dependency>
@@ -47,13 +63,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <modules>
-        <!-- Spring Boot初始项目搭建，启动Banner设置 -->
-        <module>spring-boot-banner</module>
-        <!-- Spring Boot Profile配置 -->
-        <module>spring-boot-profile</module>
-    </modules>
-
 
 </project>
