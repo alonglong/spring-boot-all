@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Class-Path: slf4j-api-1.7.25.jar snakeyaml-1.23.jar javax.annotation-a
+ pi-1.3.2.jar jackson-databind-2.9.7.jar spring-boot-2.1.1.RELEASE.jar
+  spring-boot-autoconfigure-2.1.1.RELEASE.jar spring-boot-starter-json
+ -2.1.1.RELEASE.jar logback-classic-1.2.3.jar classmate-1.4.0.jar jack
+ son-datatype-jdk8-2.9.7.jar jboss-logging-3.3.2.Final.jar tomcat-embe
+ d-el-9.0.13.jar spring-core-5.1.3.RELEASE.jar spring-boot-starter-2.1
+ .1.RELEASE.jar log4j-api-2.11.1.jar spring-web-5.1.3.RELEASE.jar hibe
+ rnate-validator-6.0.13.Final.jar tomcat-embed-core-9.0.13.jar jackson
+ -annotations-2.9.0.jar jackson-datatype-jsr310-2.9.7.jar log4j-to-slf
+ 4j-2.11.1.jar spring-jcl-5.1.3.RELEASE.jar spring-boot-starter-loggin
+ g-2.1.1.RELEASE.jar spring-boot-starter-tomcat-2.1.1.RELEASE.jar spri
+ ng-webmvc-5.1.3.RELEASE.jar tomcat-embed-websocket-9.0.13.jar logback
+ -core-1.2.3.jar jackson-core-2.9.7.jar validation-api-2.0.1.Final.jar
+  spring-aop-5.1.3.RELEASE.jar spring-beans-5.1.3.RELEASE.jar jackson-
+ module-parameter-names-2.9.7.jar spring-expression-5.1.3.RELEASE.jar 
+ spring-boot-starter-web-2.1.1.RELEASE.jar spring-context-5.1.3.RELEAS
+ E.jar jul-to-slf4j-1.7.25.jar
+Main-Class: com.along.SpringBootProfileApplication
+

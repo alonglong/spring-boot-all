@@ -1,4 +1,6 @@
 spring:
   profiles:
-#    active: @profileActive@
-    active: dev,service2
+    #active: @profileActive@
+    active: prod
+    #spring.profiles.include属性用来设置无条件的激活哪些profile
+    #include: test
