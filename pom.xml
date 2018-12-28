@@ -53,6 +53,9 @@
         <module>spring-boot-banner</module>
         <!-- Spring Boot Profile配置 -->
         <module>spring-boot-profile</module>
+        <!-- Springboot整合mybatis(注解版)-->
+        <module>spring-boot-mybatis</module>
+
     </modules>
 
 
