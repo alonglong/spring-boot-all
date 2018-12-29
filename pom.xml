@@ -55,6 +55,8 @@
         <module>spring-boot-profile</module>
         <!-- Springboot整合mybatis(注解版)-->
         <module>spring-boot-mybatis</module>
+        <!-- Springboot整合mybatis(完整版)-->
+        <module>spring-boot-mybatis2</module>
 
     </modules>
 
