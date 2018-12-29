@@ -3,14 +3,13 @@ package com.along.controller;
 import com.along.entity.Person;
 import com.along.service.PersonService;
 import com.github.pagehelper.PageInfo;
-import org.hibernate.validator.constraints.EAN;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * @Description: TODO(这里用一句话描述这个类的作用)
+ * @Description: controller
  * @Author along
  * @Date 2018/12/28 18:02
  */
