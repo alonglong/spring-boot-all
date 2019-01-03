@@ -57,6 +57,8 @@
         <module>spring-boot-mybatis</module>
         <!-- Springboot整合mybatis(完整版)-->
         <module>spring-boot-mybatis2</module>
+        <!-- springboot-mybatis多数据源配置 -->
+        <module>spring-boot-mybatis-multiple-datasource</module>
 
     </modules>
 
