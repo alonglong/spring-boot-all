@@ -5,6 +5,9 @@ package com.along.common;
  */
 public interface ContextConst {
 
+    /**
+     * 数据源枚举
+     */
     enum DataSourceType {
         PRIMARY, LOCAL, PROD, TEST
     }

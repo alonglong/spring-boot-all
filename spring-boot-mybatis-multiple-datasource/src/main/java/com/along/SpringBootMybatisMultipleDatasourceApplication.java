@@ -6,7 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)//排除DataSource自动配置类,否则会默认自动配置,不会使用我们自定义的DataSource,并且启动报错
+//排除DataSource自动配置类,否则会默认自动配置,不会使用我们自定义的DataSource,并且启动报错
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @MapperScan({"com.along.dao"}) // 扫描包路径
 public class SpringBootMybatisMultipleDatasourceApplication {
 

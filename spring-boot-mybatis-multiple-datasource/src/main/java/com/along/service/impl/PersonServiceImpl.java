@@ -44,7 +44,7 @@ public class PersonServiceImpl implements PersonService {
         return new PageInfo<>(personList);
     }
 
-    @DataSource(ContextConst.DataSourceType.PROD)
+    @DataSource(ContextConst.DataSourceType.PROD) // 指定该方法使用prod数据源
     @Override
     public PageInfo<Person> findByName(String name) {
         PersonExample example = new PersonExample();
@@ -54,7 +54,7 @@ public class PersonServiceImpl implements PersonService {
         return new PageInfo<>(personList);
     }
 
-    @DataSource(ContextConst.DataSourceType.PROD)
+    @DataSource(ContextConst.DataSourceType.LOCAL) // 指定该方法使用local数据源
     @Override
     public int insert(Person person) {
 

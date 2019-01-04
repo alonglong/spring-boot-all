@@ -1,7 +1,6 @@
 package com.along.annotation;
 
 import com.along.common.ContextConst;
-
 import java.lang.annotation.*;
 
 /**

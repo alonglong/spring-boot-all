@@ -12,7 +12,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 import java.util.HashMap;
 
-
+/**
+ * 数据源配置
+ */
 @Configuration
 public class MultipleDataSourceConfig {
 
