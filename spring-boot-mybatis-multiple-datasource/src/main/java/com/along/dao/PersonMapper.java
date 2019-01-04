@@ -3,9 +3,11 @@ package com.along.dao;
 import com.along.entity.Person;
 import com.along.entity.PersonExample;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository(value = "personMapper")
 public interface PersonMapper {
     long countByExample(PersonExample example);
 

@@ -4,8 +4,11 @@ import com.along.entity.Person;
 import com.along.service.PersonService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -17,8 +20,13 @@ import java.util.List;
 @RequestMapping("person")
 public class PersonController {
 
-    @Autowired
     private PersonService personService;
+
+    @Autowired
+    public PersonController(@Qualifier("personService") PersonService personService) {
+        Assert.notNull(personService, "personService must not be null");
+        this.personService = personService;
+    }
 
     @PostMapping("add")
     public int addPerson(@RequestBody Person person) {

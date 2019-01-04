@@ -1,4 +1,4 @@
-package com.along.datasource;
+package com.along.config.datasource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

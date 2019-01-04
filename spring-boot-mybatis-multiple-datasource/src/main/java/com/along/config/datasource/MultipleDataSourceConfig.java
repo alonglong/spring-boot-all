@@ -1,4 +1,4 @@
-package com.along.datasource;
+package com.along.config.datasource;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.along.common.ContextConst;

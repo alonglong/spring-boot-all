@@ -9,6 +9,7 @@ import com.along.service.PersonService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +24,12 @@ import java.util.List;
 @Transactional
 public class PersonServiceImpl implements PersonService {
 
-    @SuppressWarnings("all")
-    @Autowired
     private PersonMapper personMapper;
+
+    @Autowired
+    public PersonServiceImpl(@Qualifier("personMapper") PersonMapper personMapper) {
+        this.personMapper = personMapper;
+    }
 
     @Override
     public Integer add(Person person) {
