@@ -59,6 +59,8 @@
         <module>spring-boot-mybatis2</module>
         <!-- springboot-mybatis多数据源配置 -->
         <module>spring-boot-mybatis-multiple-datasource</module>
+        <!-- springboot整合poi导出Excel-->
+        <module>spring-boot-poi</module>
 
     </modules>
 
