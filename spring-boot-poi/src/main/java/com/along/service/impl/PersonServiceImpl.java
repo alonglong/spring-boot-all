@@ -5,7 +5,6 @@ import com.along.dao.PersonMapper;
 import com.along.entity.Person;
 import com.along.entity.PersonExample;
 import com.along.service.PersonService;
-import jdk.nashorn.internal.objects.annotations.Setter;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
@@ -14,11 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ResourceUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Description: service实现
@@ -53,15 +57,15 @@ public class PersonServiceImpl implements PersonService {
         fileOperate(realFile);
 
         // 导出简单excel
-        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "简单Excel_"+fileName;
+        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "简单Excel_" + fileName;
         createExcelPersons(realFile);
 
         //导出复杂excel(二级)
-        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "两层表头Excel_"+fileName;
+        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "两层表头Excel_" + fileName;
         createTwoMapExcel(realFile);
 
         //导出复杂excel(三级)
-        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "三级表头Excel_"+fileName;
+        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "三级表头Excel_" + fileName;
         createThreeMapExcel(realFile);
 
         return fileName;
@@ -208,24 +212,24 @@ public class PersonServiceImpl implements PersonService {
 
         //参数设置
         List<PropSetter> props = new ArrayList<>();
-        props.add(new PropSetter("编号",null,null, "id","Long","0",4000));
-        props.add(new PropSetter("姓名",null,null,"name","String","G/通用格式",4000));
-        props.add(new PropSetter("年龄",null,null,"age","Long","0",4000));
-        props.add(new PropSetter("地址",null,null,"address","String","G/通用格式",4000));
-        props.add(new PropSetter("生日",null,null,"birth","String","G/通用格式",4000));
-        props.add(new PropSetter("创建日期",null,null,"created","date","yyyy-MM-dd HH:mm:ss",4000));
-        props.add(new PropSetter("更新日期",null,null,"updated","date","yyyy-MM-dd HH:mm:ss",4000));
-        props.add(new PropSetter("编号+姓名","编号",null,"id","Long","0",4000));
-        props.add(new PropSetter("编号+姓名","姓名",null,"name","String","G/通用格式",4000));
-        props.add(new PropSetter("年龄+地址","年龄",null,"age","Long","0",4000));
-        props.add(new PropSetter("年龄+地址","地址",null,"address","Long","0",4000));
-        props.add(new PropSetter("生日+创建日期+更新日期","生日",null,"birth","date","yyyy-MM-dd",4000));
-        props.add(new PropSetter("生日+创建日期+更新日期","创建日期",null,"created","date","yyyy-MM-dd HH:mm:ss",4000));
-        props.add(new PropSetter("生日+创建日期+更新日期","更新日期",null,"updated","date","yyyy-MM-dd HH:mm:ss",4000));
-        props.add(new PropSetter("编号+姓名+年龄+地址","编号+姓名","编号","id","Long","0",4000));
-        props.add(new PropSetter("编号+姓名+年龄+地址","编号+姓名","姓名","id","Long","0",4000));
-        props.add(new PropSetter("编号+姓名+年龄+地址","年龄+地址","年龄","age","Long","0",4000));
-        props.add(new PropSetter("编号+姓名+年龄+地址","年龄+地址","地址","address","address","G/通用格式",4000));
+        props.add(new PropSetter("编号", null, null, "id", "Long", "0", 4000));
+        props.add(new PropSetter("姓名", null, null, "name", "String", "G/通用格式", 4000));
+        props.add(new PropSetter("年龄", null, null, "age", "Long", "0", 4000));
+        props.add(new PropSetter("地址", null, null, "address", "String", "G/通用格式", 4000));
+        props.add(new PropSetter("生日", null, null, "birth", "String", "G/通用格式", 4000));
+        props.add(new PropSetter("创建日期", null, null, "created", "date", "yyyy-MM-dd HH:mm:ss", 4000));
+        props.add(new PropSetter("更新日期", null, null, "updated", "date", "yyyy-MM-dd HH:mm:ss", 4000));
+        props.add(new PropSetter("编号+姓名", "编号", null, "id", "Long", "0", 4000));
+        props.add(new PropSetter("编号+姓名", "姓名", null, "name", "String", "G/通用格式", 4000));
+        props.add(new PropSetter("年龄+地址", "年龄", null, "age", "Long", "0", 4000));
+        props.add(new PropSetter("年龄+地址", "地址", null, "address", "Long", "0", 4000));
+        props.add(new PropSetter("生日+创建日期+更新日期", "生日", null, "birth", "date", "yyyy-MM-dd", 4000));
+        props.add(new PropSetter("生日+创建日期+更新日期", "创建日期", null, "created", "date", "yyyy-MM-dd HH:mm:ss", 4000));
+        props.add(new PropSetter("生日+创建日期+更新日期", "更新日期", null, "updated", "date", "yyyy-MM-dd HH:mm:ss", 4000));
+        props.add(new PropSetter("编号+姓名+年龄+地址", "编号+姓名", "编号", "id", "Long", "0", 4000));
+        props.add(new PropSetter("编号+姓名+年龄+地址", "编号+姓名", "姓名", "id", "Long", "0", 4000));
+        props.add(new PropSetter("编号+姓名+年龄+地址", "年龄+地址", "年龄", "age", "Long", "0", 4000));
+        props.add(new PropSetter("编号+姓名+年龄+地址", "年龄+地址", "地址", "address", "address", "G/通用格式", 4000));
 
 
         //设置要合并单元格坐标值,可以用for循环写，这里每条举例是为了看的清晰
@@ -255,10 +259,6 @@ public class PersonServiceImpl implements PersonService {
         fps.add(new FourPoint(1, 1, 16, 17));
 
 
-
-
-
-
         // 获取数据
         List<Person> data = personMapper.selectByExample(new PersonExample());
         // 将lists转为map列表
@@ -275,7 +275,6 @@ public class PersonServiceImpl implements PersonService {
         outputStream.flush();
         outputStream.close();
     }
-
 
 
 }
