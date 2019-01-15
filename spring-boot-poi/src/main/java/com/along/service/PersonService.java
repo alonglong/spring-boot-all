@@ -13,7 +13,7 @@ public interface PersonService {
     /**
      * 全量数据导出
      */
-    String exportPersons() throws IOException;
+    String exportPersons() throws IOException, Exception;
 
 
 }

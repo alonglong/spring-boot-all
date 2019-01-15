@@ -29,7 +29,7 @@ public class CellSetter {
 	/**
 	 *
 	 */
-	private ExeclColRnderer render;
+	private ExcelColRnderer render;
 
 
 	public int getCellColumnWidth() {
@@ -72,11 +72,11 @@ public class CellSetter {
 		this.type = type;
 	}
 
-	public ExeclColRnderer getRender() {
+	public ExcelColRnderer getRender() {
 		return render;
 	}
 
-	public void setRender(ExeclColRnderer render) {
+	public void setRender(ExcelColRnderer render) {
 		this.render = render;
 	}
 
@@ -90,7 +90,7 @@ public class CellSetter {
 	}
 	
 
-	public CellSetter(String title, String property, String type, String format, int cellColumnWidth, ExeclColRnderer render) {
+	public CellSetter(String title, String property, String type, String format, int cellColumnWidth, ExcelColRnderer render) {
 		super();
 		this.title = title;
 		this.property = property;
@@ -104,8 +104,4 @@ public class CellSetter {
 
 	}
 
-}
-
-interface ExeclColRnderer{
-	String view(Object o);
 }

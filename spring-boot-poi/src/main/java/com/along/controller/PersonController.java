@@ -32,7 +32,7 @@ public class PersonController {
     }
 
     @GetMapping("export")
-    public String exportPersons() throws IOException {
+    public String exportPersons() throws Exception {
         logger.info("导出[全量用户信息]");
         String fileName = personService.exportPersons();
         logger.info("导出[全量用户信息] 成功 FileName : {} ", fileName);
