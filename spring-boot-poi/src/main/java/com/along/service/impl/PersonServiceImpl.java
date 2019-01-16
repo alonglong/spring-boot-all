@@ -66,7 +66,7 @@ public class PersonServiceImpl implements PersonService {
         createThreeMapExcel(realFile);
 
         //导出复杂excel(任意)
-        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "任意表头Excel_" + fileName;
+        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "任意层表头Excel_" + fileName;
         createAnyMapExcel(realFile);
 
         return fileName;
@@ -288,25 +288,25 @@ public class PersonServiceImpl implements PersonService {
         //参数设置
         List<MoreSetter> props = new ArrayList<>();
         // props.add(new MoreSetter(new ArrayList<String>(){{add("编号");add(null);add(null);}}, "id", "Long", "0", 4000));
-        // 由于不会对MoreSetter的rowList做add和remove操作，所以用Arrays.asList创建List
+        // 由于不会对MoreSetter的rowList做add和remove操作，所以用Arrays.asList创建List，更加清晰
         props.add(new MoreSetter(Arrays.asList("编号", null, null), "id", "Long", "0", 4000));
-        props.add(new MoreSetter(Arrays.asList("姓名",null,null), "name","String", "G/通用格式", 4000));
-        props.add(new MoreSetter(Arrays.asList("年龄",null,null), "age", "Long", "0", 4000));
-        props.add(new MoreSetter(Arrays.asList("地址",null,null), "address", "String", "G/通用格式", 4000));
-        props.add(new MoreSetter(Arrays.asList("生日",null,null), "birth", "String", "G/通用格式", 4000));
-        props.add(new MoreSetter(Arrays.asList("创建日期",null,null), "created", "date", "yyyy-MM-dd HH:mm:ss", 4000));
-        props.add(new MoreSetter(Arrays.asList("更新日期",null,null), "updated", "date", "yyyy-MM-dd HH:mm:ss", 4000));
-        props.add(new MoreSetter(Arrays.asList("编号+姓名","编号",null), "id", "Long", "0", 4000));
-        props.add(new MoreSetter(Arrays.asList("编号+姓名","姓名",null), "name", "String", "G/通用格式", 4000));
-        props.add(new MoreSetter(Arrays.asList("年龄+地址","年龄",null), "age", "Long", "0", 4000));
-        props.add(new MoreSetter(Arrays.asList("年龄+地址","地址",null), "address", "Long", "0", 4000));
-        props.add(new MoreSetter(Arrays.asList("生日+创建日期+更新日期","生日",null), "birth", "date", "yyyy-MM-dd", 4000));
-        props.add(new MoreSetter(Arrays.asList("生日+创建日期+更新日期","创建日期",null), "created", "date", "yyyy-MM-dd HH:mm:ss", 4000));
-        props.add(new MoreSetter(Arrays.asList("生日+创建日期+更新日期","更新日期",null), "updated", "date", "yyyy-MM-dd HH:mm:ss", 4000));
-        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址","编号+姓名","编号"), "id", "Long", "0", 4000));
-        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址","编号+姓名","姓名"), "id", "Long", "0", 4000));
-        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址","年龄+地址","年龄"), "age", "Long", "0", 4000));
-        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址","年龄+地址","地址"), "address", "address", "G/通用格式", 4000));
+        props.add(new MoreSetter(Arrays.asList("姓名", null, null), "name", "String", "G/通用格式", 4000));
+        props.add(new MoreSetter(Arrays.asList("年龄", null, null), "age", "Long", "0", 4000));
+        props.add(new MoreSetter(Arrays.asList("地址", null, null), "address", "String", "G/通用格式", 4000));
+        props.add(new MoreSetter(Arrays.asList("生日", null, null), "birth", "String", "G/通用格式", 4000));
+        props.add(new MoreSetter(Arrays.asList("创建日期", null, null), "created", "date", "yyyy-MM-dd HH:mm:ss", 4000));
+        props.add(new MoreSetter(Arrays.asList("更新日期", null, null), "updated", "date", "yyyy-MM-dd HH:mm:ss", 4000));
+        props.add(new MoreSetter(Arrays.asList("编号+姓名", "编号", null), "id", "Long", "0", 4000));
+        props.add(new MoreSetter(Arrays.asList("编号+姓名", "姓名", null), "name", "String", "G/通用格式", 4000));
+        props.add(new MoreSetter(Arrays.asList("年龄+地址", "年龄", null), "age", "Long", "0", 4000));
+        props.add(new MoreSetter(Arrays.asList("年龄+地址", "地址", null), "address", "Long", "0", 4000));
+        props.add(new MoreSetter(Arrays.asList("生日+创建日期+更新日期", "生日", null), "birth", "date", "yyyy-MM-dd", 4000));
+        props.add(new MoreSetter(Arrays.asList("生日+创建日期+更新日期", "创建日期", null), "created", "date", "yyyy-MM-dd HH:mm:ss", 4000));
+        props.add(new MoreSetter(Arrays.asList("生日+创建日期+更新日期", "更新日期", null), "updated", "date", "yyyy-MM-dd HH:mm:ss", 4000));
+        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址", "编号+姓名", "编号"), "id", "Long", "0", 4000));
+        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址", "编号+姓名", "姓名"), "id", "Long", "0", 4000));
+        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址", "年龄+地址", "年龄"), "age", "Long", "0", 4000));
+        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址", "年龄+地址", "地址"), "address", "address", "G/通用格式", 4000));
 
 
         //设置要合并单元格坐标值,可以用for循环写，这里每条举例是为了看的清晰
@@ -346,7 +346,7 @@ public class PersonServiceImpl implements PersonService {
         }
 
         OutputStream outputStream = new FileOutputStream(realFile);
-        SXSSFWorkbook workbook = CreateMoreMapExcel.create(mapList, props, fps, "全量用户信息",3);
+        SXSSFWorkbook workbook = CreateMoreMapExcel.create(mapList, props, fps, "全量用户信息");
         workbook.write(outputStream);
         logger.info("用户全量数据导出成功");
         outputStream.flush();

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class MoreSetter {
 
-    private List<String> rowList; //行标题集合
+    private List<String> rowTitles; // 行标题名集合
 
     private String prop;// 字段值
 
@@ -25,12 +25,12 @@ public class MoreSetter {
     private ExcelColRnderer render;
 
 
-    public List<String> getRowList() {
-        return rowList;
+    public List<String> getRowTitles() {
+        return rowTitles;
     }
 
-    public void setRowList(LinkedList<String> rowList) {
-        this.rowList = rowList;
+    public void setRowTitles(LinkedList<String> rowTitles) {
+        this.rowTitles = rowTitles;
     }
 
     public String getProp() {
@@ -81,45 +81,45 @@ public class MoreSetter {
         this.render = render;
     }
 
-    public MoreSetter(List<String> rowList, String prop, int width) {
+    public MoreSetter(List<String> rowTitles, String prop, int width) {
         super();
-        this.rowList = rowList;
+        this.rowTitles = rowTitles;
         this.prop = prop;
         this.width = width;
     }
 
-    public MoreSetter(List<String> rowList, String prop, int width,
+    public MoreSetter(List<String> rowTitles, String prop, int width,
                       boolean color) {
         super();
-        this.rowList = rowList;
+        this.rowTitles = rowTitles;
         this.prop = prop;
         this.width = width;
         this.color = color;
     }
 
-    public MoreSetter(List<String> rowList, String prop, String type,
+    public MoreSetter(List<String> rowTitles, String prop, String type,
                       int width) {
         super();
-        this.rowList = rowList;
+        this.rowTitles = rowTitles;
         this.prop = prop;
         this.type = type;
         this.width = width;
     }
 
-    public MoreSetter(List<String> rowList, String prop, String type, String format,
+    public MoreSetter(List<String> rowTitles, String prop, String type, String format,
                       int width) {
         super();
-        this.rowList = rowList;
+        this.rowTitles = rowTitles;
         this.prop = prop;
         this.type = type;
         this.format = format;
         this.width = width;
     }
 
-    public MoreSetter(List<String> rowList, String prop, String type, String format,
+    public MoreSetter(List<String> rowTitles, String prop, String type, String format,
                       int width, ExcelColRnderer render) {
         super();
-        this.rowList = rowList;
+        this.rowTitles = rowTitles;
         this.prop = prop;
         this.type = type;
         this.format = format;

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description: 复杂表头excel，可以自定义多级，推荐3级以上的表格使用
+ * @Description: 复杂表头excel，支持任意复杂的表头
  * @Author along
  * @Date 2019/1/14 17:19
  */
@@ -23,15 +23,14 @@ public class CreateMoreMapExcel {
     private static Logger logger = LoggerFactory.getLogger(CreateMoreMapExcel.class);
 
     /**
-     * @param datas     数据
-     * @param props     参数设置
-     * @param fps       合并单元格坐标值
-     * @param sheetName 单元格名称
-     * @param lineCount 表头的行数
+     * @param datas       数据
+     * @param moreSetters 参数设置
+     * @param fps         合并单元格坐标值
+     * @param sheetName   单元格名称
      * @return
      */
     public static SXSSFWorkbook create(List<Map<String, Object>> datas,
-                                       List<MoreSetter> props, List<FourPoint> fps, String sheetName, int lineCount) {
+                                       List<MoreSetter> moreSetters, List<FourPoint> fps, String sheetName) {
 
         long startTime = System.currentTimeMillis();
         SXSSFWorkbook workbook = new SXSSFWorkbook();
@@ -68,44 +67,46 @@ public class CreateMoreMapExcel {
         stringStyle.setFont(contentFont);
         stringStyle.setWrapText(true);
 
+        // 标题的行数
+        int lineCount = moreSetters.get(0).getRowTitles().size();
 
+        // 标题设置
         List<Row> rowList = new ArrayList<>();
         for (int i = 0; i < lineCount; i++) {
             Row row = sheet.createRow(i);
             row.setHeight((short) 350); // 设置行高
             rowList.add(row);
         }
-
         Cell cell;
-        for (int i = 0; i < props.size(); i++) {
+        for (int i = 0; i < moreSetters.size(); i++) {
             for (int j = 0; j < rowList.size(); j++) {
                 cell = rowList.get(j).createCell(i); // 一级标题的设置
                 cell.setCellStyle(titleStyle);
-                cell.setCellValue(props.get(i).getRowList().get(j));
+                cell.setCellValue(moreSetters.get(i).getRowTitles().get(j));
             }
-            sheet.setColumnWidth(i, props.get(i).getWidth()); // 宽度
+            sheet.setColumnWidth(i, moreSetters.get(i).getWidth()); // 宽度
         }
-
         for (FourPoint fp : fps) { // 合并单元格
             sheet.addMergedRegion(new CellRangeAddress(fp.getRowStart(), fp.getRowEnd(),
                     fp.getColStart(), fp.getColEnd()));
         }
+
         // 内容设置
         Row row;
         if (datas.size() != 0) {
             for (int m = 0; m < datas.size(); m++) {
                 row = sheet.createRow(m + lineCount);
                 row.setHeight((short) 310);
-                for (int i = 0; i < props.size(); i++) {
+                for (int i = 0; i < moreSetters.size(); i++) {
                     Cell cont = row.createCell(i);
-                    Object value = datas.get(m).get(props.get(i).getProp());
+                    Object value = datas.get(m).get(moreSetters.get(i).getProp());
                     if (value == null) {
                         cont.setCellValue("");
                         cont.setCellStyle(stringStyle);
-                    } else if (props.get(i).getRender() != null) {
+                    } else if (moreSetters.get(i).getRender() != null) {
                         cont.setCellType(HSSFCell.CELL_TYPE_STRING);
                         cont.setCellStyle(stringStyle);
-                        cont.setCellValue(props.get(i).getRender().view(value));
+                        cont.setCellValue(moreSetters.get(i).getRender().view(value));
                     } else {
                         cont.setCellType(HSSFCell.CELL_TYPE_STRING);
                         cont.setCellValue(String.valueOf(value));
