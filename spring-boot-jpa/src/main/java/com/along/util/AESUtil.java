@@ -17,7 +17,7 @@ public class AESUtil {
 
     /**
      * 加密1
-     * @param content 加密内容，字符串
+     * @param content 要加密的内容，字符串
      * @param password 盐
      * @return 加密之后的字节数组
      */
@@ -42,7 +42,7 @@ public class AESUtil {
 
     /**
      * 加密2
-     * @param content 加密内容，字符串
+     * @param content 要加密的内容，字符串
      * @param password 盐
      * @return 加密之后的字符串
      */
@@ -68,7 +68,7 @@ public class AESUtil {
 
     /**
      * 解密1
-     * @param content 解密内容，字节数组
+     * @param content 要解密的内容，字节数组
      * @param password 盐
      * @return 解密之后的字节数组
      */
@@ -92,7 +92,7 @@ public class AESUtil {
 
     /**
      * 解密2
-     * @param content 解密内容
+     * @param content 要解密的内容
      * @param password 盐
      * @return 解密之后的字符串
      */
@@ -122,8 +122,8 @@ public class AESUtil {
      */
     public static String parseByte2HexStr(byte buf[]) {
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < buf.length; i++) {
-            String hex = Integer.toHexString(buf[i] & 0xFF);
+        for (byte aBuf : buf) {
+            String hex = Integer.toHexString(aBuf & 0xFF);
             if (hex.length() == 1) {
                 hex = '0' + hex;
             }
