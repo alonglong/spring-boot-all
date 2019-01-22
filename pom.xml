@@ -61,6 +61,8 @@
         <module>spring-boot-mybatis-multiple-datasource</module>
         <!-- springboot整合poi导出Excel-->
         <module>spring-boot-poi</module>
+        <!-- springboot整合jpa使用-->
+        <module>spring-boot-jpa</module>
 
     </modules>
 
