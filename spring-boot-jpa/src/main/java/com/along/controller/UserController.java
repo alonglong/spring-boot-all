@@ -15,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -40,13 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    public ResultMapper save(@RequestBody @Valid UserDTO userDTO, BindingResult result) {
-        //表单校验
-        if (result.hasErrors()) {
-            List<ObjectError> allErrors = result.getAllErrors();
-            return ResultMapperUtil.error(403,"参数错误", allErrors);
-
-        }
+    public ResultMapper save(@RequestBody @Validated(UserDTO.ParameterGroup1.class) UserDTO userDTO) {
         User save = userService.save(userDTO);
         if (null == save) {
             return ResultMapperUtil.error(406, "添加失败");

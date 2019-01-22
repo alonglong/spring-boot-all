@@ -1,10 +1,10 @@
 package com.along.model.dto;
 
-import com.along.annotation.Enum;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -14,23 +14,24 @@ import java.util.Date;
  */
 public class UserDTO {
 
+    @NotNull(message = "id不能为空", groups = {ParameterGroup2.class})
     private String id;
 
-    @NotEmpty(message = "用户名不能为空")
+    @NotEmpty(message = "用户名不能为空", groups = {ParameterGroup1.class, ParameterGroup2.class})
     private String name;
 
-    @NotEmpty(message = "用户密码不能为空")
+    @NotEmpty(message = "用户密码不能为空", groups = {ParameterGroup1.class, ParameterGroup2.class})
     private String password;
 
-    @NotNull(message = "性别不能为空")
+    @NotNull(message = "性别不能为空", groups = {ParameterGroup1.class, ParameterGroup2.class})
     private Integer sex;
 
     private Integer status = 1; //-1：删除 0: 禁用 1：启用
 
-    @Email(message = "邮箱格式错误")
+    @Email(message = "邮箱格式错误", groups = {ParameterGroup1.class, ParameterGroup2.class})
     private String email;
 
-    @NotNull(message = "生日不能为空")
+    @NotNull(message = "生日不能为空", groups = {ParameterGroup1.class, ParameterGroup2.class})
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
@@ -100,5 +101,18 @@ public class UserDTO {
 
     public void setRoleIds(String roleIds) {
         this.roleIds = roleIds;
+    }
+
+
+    /**
+     * 验证组1,添加
+     */
+    public interface ParameterGroup1 {
+    }
+
+    /**
+     * 验证组2,修改
+     */
+    public interface ParameterGroup2 {
     }
 }
