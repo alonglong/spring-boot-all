@@ -82,4 +82,13 @@ public class UserController {
         return ResultMapperUtil.success(userVos);
     }
 
+    @PostMapping("/update")
+    public ResultMapper update(@RequestBody @Validated(UserDTO.ParameterGroup2.class) UserDTO userDTO) {
+        Boolean b = userService.update(userDTO);
+        if (!b) {
+            return ResultMapperUtil.error(406, "更新失败");
+        }
+        return ResultMapperUtil.success();
+    }
+
 }

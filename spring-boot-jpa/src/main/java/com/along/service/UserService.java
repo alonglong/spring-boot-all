@@ -3,6 +3,7 @@ package com.along.service;
 import com.along.model.dto.UserDTO;
 import com.along.model.entity.User;
 import com.along.model.vo.UserVo;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -25,7 +26,9 @@ public interface UserService {
 
     List<UserVo> findByNameLike(String name);
 
-    User update(UserDTO user);
+    Boolean update(UserDTO user);
+
+    void delete(String id);
 
 
 }

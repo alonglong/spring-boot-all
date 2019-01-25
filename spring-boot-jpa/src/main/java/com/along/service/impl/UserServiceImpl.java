@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -37,11 +39,13 @@ public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
     private RoleDao roleDao;
+    private EntityManager entityManager;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, RoleDao roleDao) {
+    public UserServiceImpl(UserDao userDao, RoleDao roleDao, EntityManager entityManager) {
         this.userDao = userDao;
         this.roleDao = roleDao;
+        this.entityManager = entityManager;
     }
 
 
@@ -74,6 +78,7 @@ public class UserServiceImpl implements UserService {
      * 实例查询演示
      * 优点：通过在使用springdata jpa时可以通过Example来快速的实现动态查询，同时配合Pageable可以实现快速的分页查询功能。
      * 局限：对于非字符串属性的只能精确匹配，比如想查询在某个时间段内注册的用户信息，就不能通过Example来查询
+     *
      * @param name
      * @return
      */
@@ -105,27 +110,52 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 强烈推荐，这种方法简洁，可读性强，还可以返回特定的Vo，Vo是一个接口
+     *
      * @param name
      * @return
      */
     @Override
     public List<UserVo> findByNameLike(String name) {
-        List<UserVo> userVos = userDao.findByNameLike("%"+name+"%");
+        List<UserVo> userVos = userDao.findByNameLike("%" + name + "%");
 
         return userVos;
     }
 
+    /**
+     * 更新
+     * @param userDTO
+     * @return
+     */
     @Override
-    public User update(UserDTO userDTO) {
-        return null;
+    public Boolean update(UserDTO userDTO) {
+        Optional<User> opt = userDao.findById(userDTO.getId());
+        if (opt.isPresent()) {
+            User user = opt.get();
+            //信息拷贝,忽略空值
+            BeanUtils.copyProperties(userDTO, user, NullUtils.getNullPropertyNames(userDTO));
+            //return userDao.save(user);
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
+    /**
+     * 删除
+     * @param id
+     */
+    @Override
+    public void delete(String id) {
+
+        userDao.deleteById(id);
     }
 
     /**
      * UserDto转化为User
+     *
      * @param userDTO
      * @return
      */
-    private User userDTO2User(UserDTO userDTO){
+    private User userDTO2User(UserDTO userDTO) {
         User user = new User();
         //加密密码
         if (!StringUtils.isEmpty(userDTO.getPassword())) {
