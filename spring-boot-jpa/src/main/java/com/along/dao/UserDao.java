@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +17,7 @@ import java.util.List;
  * @Author along
  * @Date 2019/1/9 14:07
  */
-public interface UserDao extends JpaRepository<User, String> {
+public interface UserDao extends JpaRepository<User, String>, JpaSpecificationExecutor<User> {
 
     //重写findAll(Pageable pageable)方法,用实体图查询
     @EntityGraph(value = "user.all", type = EntityGraph.EntityGraphType.FETCH)
