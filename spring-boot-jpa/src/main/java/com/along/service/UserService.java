@@ -7,6 +7,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 /**
@@ -29,6 +30,14 @@ public interface UserService {
     Boolean update(UserDTO user);
 
     void delete(String id);
+
+    List<User> findUserByName(String name);
+
+    List<User> findUserByNameAndSex1(String name, Integer sex);
+
+    List<User> findUserByNameAndSex2(String name, Integer sex);
+
+    List<User> findUserByIds(List<String> ids);
 
 
 }

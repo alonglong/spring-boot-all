@@ -17,11 +17,13 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.FlushModeType;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.*;
 
@@ -123,6 +125,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 更新
+     *
      * @param userDTO
      * @return
      */
@@ -141,6 +144,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 删除
+     *
      * @param id
      */
     @Override
@@ -175,4 +179,79 @@ public class UserServiceImpl implements UserService {
 
         return user;
     }
+
+    // ---------------------使用Specifications动态构建查询：
+
+    /**
+     * 根据name查询
+     *
+     * @param name
+     * @return
+     */
+    @Override
+    public List<User> findUserByName(String name) {
+        return userDao.findAll(new Specification<User>() {
+            @Override
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                Predicate predicate = criteriaBuilder.equal(root.get("name"), name);
+                return predicate;
+            }
+        });
+    }
+
+    /**
+     * 根据name和sex查询,方式一
+     *
+     * @param name
+     * @param sex
+     * @return
+     */
+    @Override
+    public List<User> findUserByNameAndSex1(String name, Integer sex) {
+        return userDao.findAll(new Specification<User>() {
+            @Override
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> list = new ArrayList<>();
+
+                list.add(criteriaBuilder.equal(root.get("name"), name));
+                list.add(criteriaBuilder.equal(root.get("sex"), sex));
+
+                Predicate[] predicates = new Predicate[list.size()];
+                return criteriaBuilder.and(list.toArray(predicates));
+            }
+        });
+    }
+
+    /**
+     * 根据name和sex查询,方式二（个人推荐）
+     *
+     * @param name
+     * @param sex
+     * @return
+     */
+    @Override
+    public List<User> findUserByNameAndSex2(String name, Integer sex) {
+        return userDao.findAll(new Specification<User>() {
+            @Override
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                return criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get("name"), name),
+                        criteriaBuilder.equal(root.get("sex"), sex)
+                );
+            }
+        });
+    }
+
+    /**
+     * in 查询
+     *
+     * @param ids
+     * @return
+     */
+    @Override
+    public List<User> findUserByIds(List<String> ids) {
+        return userDao.findAll((Specification<User>) (root, query, criteriaBuilder) -> root.in(ids));
+    }
+
+
 }

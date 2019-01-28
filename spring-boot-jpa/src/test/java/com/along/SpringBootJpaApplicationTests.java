@@ -10,8 +10,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.PropertyValueTransformer;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,8 +45,7 @@ public class SpringBootJpaApplicationTests {
                 .withIgnorePaths("status", "sex")
                 .withIgnoreCase()
                 .withIgnoreCase(true)
-                .withIgnoreCase("name")
-                ;
+                .withIgnoreCase("name");
 
 
         // 创建实例
@@ -55,6 +59,31 @@ public class SpringBootJpaApplicationTests {
         for (User u : users) {
             System.out.println(u.getName());
         }
+
+    }
+
+    @Test
+    public void findUserByNameTest() {
+        final String name = "along";
+
+        List<User> userList = userDao.findAll(new Specification<User>() {
+
+            /*
+             *
+             * @param root 代表要查询的实体类型
+             * @param query 用来添加查询条件，可以从中可到 Root 对象, 即告知 JPA Criteria 查询要查询哪一个实体类.
+             *              还可以结合 EntityManager 对象得到最终查询的 TypedQuery 对象.
+             * @param criteriaBuilder 构建 Predicate 对象，用于创建 Criteria 相关对象的工厂.
+             * @return
+             */
+            @Override
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                Predicate predicate = criteriaBuilder.equal(root.get("name"), name);
+                return predicate;
+            }
+        });
+
+
 
     }
 
