@@ -31,6 +31,8 @@ public interface UserService {
 
     void delete(String id);
 
+    public List<User> findUserByNameAndSex0(String name, Integer sex);
+
     List<User> findUserByName(String name);
 
     List<User> findUserByNameAndSex1(String name, Integer sex);
@@ -38,6 +40,10 @@ public interface UserService {
     List<User> findUserByNameAndSex2(String name, Integer sex);
 
     List<User> findUserByIds(List<String> ids);
+
+    Page<User> findUser(User user, int page, int size);
+
+    List<User> findUserByArticleAndRole(String articleId, String roleId);
 
 
 }

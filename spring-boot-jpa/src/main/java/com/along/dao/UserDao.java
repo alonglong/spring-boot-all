@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,5 +28,8 @@ public interface UserDao extends JpaRepository<User, String>, JpaSpecificationEx
 
     // 这里的模糊查询并不会自动在name两边加"%"，需要手动对参数加"%"
     List<UserVo> findByNameLike(String name);
+
+    @Query("select u from User u where u.name like concat('%',:name,'%') and u.sex = :sex")
+    List<User> findUserByNameAndSex(@Param("name") String name, @Param("sex") Integer sex);
 
 }
