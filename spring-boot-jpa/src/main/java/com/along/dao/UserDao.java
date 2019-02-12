@@ -29,6 +29,8 @@ public interface UserDao extends JpaRepository<User, String>, JpaSpecificationEx
     // 这里的模糊查询并不会自动在name两边加"%"，需要手动对参数加"%"
     List<UserVo> findByNameLike(String name);
 
+    List<User> findByName(String name);
+
     @Query("select u from User u where u.name like concat('%',:name,'%') and u.sex = :sex")
     List<User> findUserByNameAndSex(@Param("name") String name, @Param("sex") Integer sex);
 

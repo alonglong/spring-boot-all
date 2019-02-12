@@ -76,10 +76,16 @@ public class UserController {
         return ResultMapperUtil.success(users);
     }
 
-    @GetMapping("/findByName/{name}")
+    @GetMapping("/findByNameLike/{name}")
     public ResultMapper findByNameLike(@PathVariable String name) {
         List<UserVo> userVos = userService.findByNameLike(name);
         return ResultMapperUtil.success(userVos);
+    }
+
+    @GetMapping("/findByName/{name}")
+    public ResultMapper findByName(@PathVariable String name) {
+        List<User> users = userService.findByName(name);
+        return ResultMapperUtil.success(users);
     }
 
     @PostMapping("/update")

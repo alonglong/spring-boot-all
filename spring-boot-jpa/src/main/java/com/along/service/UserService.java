@@ -27,6 +27,8 @@ public interface UserService {
 
     List<UserVo> findByNameLike(String name);
 
+    List<User> findByName(String name);
+
     Boolean update(UserDTO user);
 
     void delete(String id);

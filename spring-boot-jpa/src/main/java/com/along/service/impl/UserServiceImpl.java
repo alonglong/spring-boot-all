@@ -121,6 +121,12 @@ public class UserServiceImpl implements UserService {
         return userVos;
     }
 
+    @Override
+    public List<User> findByName(String name) {
+        List<User> users = userDao.findByName(name);
+        return users;
+    }
+
     /**
      * 更新
      *
