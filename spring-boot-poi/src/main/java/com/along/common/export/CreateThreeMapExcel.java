@@ -9,6 +9,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public class CreateThreeMapExcel {
         SXSSFWorkbook workbook = new SXSSFWorkbook();
         Sheet sheet = workbook.createSheet();
         workbook.setSheetName(0, sheetName);
+        DataFormat format = workbook.createDataFormat();
 
         Font titleFont = workbook.createFont();
         titleFont.setFontName("微软雅黑");
@@ -51,23 +53,59 @@ public class CreateThreeMapExcel {
         CellStyle titleStyle = workbook.createCellStyle();
         titleStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 垂直
         titleStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);// 水平
-        titleStyle.setBorderBottom(CellStyle.BORDER_THIN);
-        titleStyle.setBorderLeft(CellStyle.BORDER_THIN);
-        titleStyle.setBorderRight(CellStyle.BORDER_THIN);
-        titleStyle.setBorderTop(CellStyle.BORDER_THIN);
+        titleStyle.setBorderTop(CellStyle.BORDER_THIN); // 上边跨
+        titleStyle.setBorderRight(CellStyle.BORDER_THIN); // 右边框
+        titleStyle.setBorderBottom(CellStyle.BORDER_THIN); // 下边框
+        titleStyle.setBorderLeft(CellStyle.BORDER_THIN); // 左边框
         titleStyle.setFillForegroundColor(HSSFColor.LIGHT_GREEN.index);// 填暗红色
-        titleStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
-        titleStyle.setFont(titleFont);
+        titleStyle.setFillPattern(CellStyle.SOLID_FOREGROUND); // 设置背景色
+        titleStyle.setFont(titleFont); // 设置字体
         titleStyle.setWrapText(true);
 
         CellStyle stringStyle = workbook.createCellStyle();
-        stringStyle.setAlignment(CellStyle.ALIGN_LEFT);
-        stringStyle.setBorderBottom(CellStyle.BORDER_THIN);
-        stringStyle.setBorderLeft(CellStyle.BORDER_THIN);
-        stringStyle.setBorderRight(CellStyle.BORDER_THIN);
-        stringStyle.setBorderTop(CellStyle.BORDER_THIN);
-        stringStyle.setFont(contentFont);
+        stringStyle.setAlignment(CellStyle.ALIGN_LEFT); // 内容据左
+        stringStyle.setBorderTop(CellStyle.BORDER_THIN); // 上边跨
+        stringStyle.setBorderRight(CellStyle.BORDER_THIN); // 右边框
+        stringStyle.setBorderBottom(CellStyle.BORDER_THIN); // 下边框
+        stringStyle.setBorderLeft(CellStyle.BORDER_THIN); // 左边框
+        stringStyle.setFont(contentFont); // 设置字体
         stringStyle.setWrapText(true);
+
+        CellStyle longStyle = workbook.createCellStyle();
+        longStyle.setAlignment(CellStyle.ALIGN_LEFT); // 内容据左
+        longStyle.setBorderTop(CellStyle.BORDER_THIN); // 上边跨
+        longStyle.setBorderRight(CellStyle.BORDER_THIN); // 右边框
+        longStyle.setBorderBottom(CellStyle.BORDER_THIN); // 下边框
+        longStyle.setBorderLeft(CellStyle.BORDER_THIN); // 左边框
+        longStyle.setFont(contentFont); // 设置字体
+        longStyle.setWrapText(true);
+
+        CellStyle doubleStyle = workbook.createCellStyle();
+        doubleStyle.setAlignment(CellStyle.ALIGN_LEFT); // 内容据左
+        doubleStyle.setBorderTop(CellStyle.BORDER_THIN); // 上边跨
+        doubleStyle.setBorderRight(CellStyle.BORDER_THIN); // 右边框
+        doubleStyle.setBorderBottom(CellStyle.BORDER_THIN); // 下边框
+        doubleStyle.setBorderLeft(CellStyle.BORDER_THIN); // 左边框
+        doubleStyle.setFont(contentFont); // 设置字体
+        doubleStyle.setWrapText(true);
+
+        CellStyle dateStyle = workbook.createCellStyle();
+        dateStyle.setAlignment(CellStyle.ALIGN_LEFT); // 内容据左
+        dateStyle.setBorderTop(CellStyle.BORDER_THIN); // 上边跨
+        dateStyle.setBorderRight(CellStyle.BORDER_THIN); // 右边框
+        dateStyle.setBorderBottom(CellStyle.BORDER_THIN); // 下边框
+        dateStyle.setBorderLeft(CellStyle.BORDER_THIN); // 左边框
+        dateStyle.setFont(contentFont); // 设置字体
+        dateStyle.setWrapText(true);
+
+        CellStyle booleanStyle = workbook.createCellStyle();
+        booleanStyle.setAlignment(CellStyle.ALIGN_LEFT); // 内容据左
+        booleanStyle.setBorderTop(CellStyle.BORDER_THIN); // 上边跨
+        booleanStyle.setBorderRight(CellStyle.BORDER_THIN); // 右边框
+        booleanStyle.setBorderBottom(CellStyle.BORDER_THIN); // 下边框
+        booleanStyle.setBorderLeft(CellStyle.BORDER_THIN); // 左边框
+        booleanStyle.setFont(contentFont); // 设置字体
+        booleanStyle.setWrapText(true);
 
         Row rowOne = sheet.createRow(0);
         rowOne.setHeight((short) 350);
@@ -100,18 +138,54 @@ public class CreateThreeMapExcel {
                 row.setHeight((short) 310);
                 for (int i = 0; i < props.size(); i++) {
                     Cell cont = row.createCell(i);
-                    Object value = datas.get(m).get(props.get(i).getProp());
+                    PropSetter propSetter = props.get(i);
+                    Object value = datas.get(m).get(propSetter.getProp());
                     if (value == null) {
                         cont.setCellValue("");
                         cont.setCellStyle(stringStyle);
-                    } else if (props.get(i).getRender() != null) {
-                        cont.setCellType(HSSFCell.CELL_TYPE_STRING);
+                        continue;
+                    }
+                    if (propSetter.getRender() != null) {
+                        cont.setCellType(Cell.CELL_TYPE_STRING);
+                        cont.setCellValue(propSetter.getRender().view(value));
                         cont.setCellStyle(stringStyle);
-                        cont.setCellValue(props.get(i).getRender().view(value));
-                    } else {
-                        cont.setCellType(HSSFCell.CELL_TYPE_STRING);
-                        cont.setCellValue(String.valueOf(value));
+                        continue;
+                    }
+                    String type = propSetter.getType().trim().toLowerCase();
+                    if ("string".equals(type) || "char".equals(type)) {
+                        cont.setCellType(Cell.CELL_TYPE_STRING);
+                        cont.setCellValue(value.toString());
+                        stringStyle.setDataFormat(format.getFormat(propSetter.getFormat()));
                         cont.setCellStyle(stringStyle);
+                        continue;
+                    }
+                    if ("date".equals(type)) {
+                        cont.setCellType(Cell.CELL_TYPE_NUMERIC);
+                        cont.setCellValue((Date) value);
+                        dateStyle.setDataFormat(format.getFormat(propSetter.getFormat()));
+                        cont.setCellStyle(dateStyle);
+                        continue;
+                    }
+                    if ("long".equals(type) || "int".equals(type)
+                            || "byte".equals(type) || "short".equals(type)) {
+                        cont.setCellType(Cell.CELL_TYPE_NUMERIC);
+                        cont.setCellValue(Long.parseLong(value.toString()));
+                        longStyle.setDataFormat(format.getFormat(propSetter.getFormat()));
+                        cont.setCellStyle(longStyle);
+                        continue;
+                    }
+                    if ("double".equals(type) || "float".equals(type)) {
+                        cont.setCellType(Cell.CELL_TYPE_NUMERIC);
+                        cont.setCellValue(Double.parseDouble(value.toString()));
+                        doubleStyle.setDataFormat(format.getFormat(propSetter.getFormat()));
+                        cont.setCellStyle(doubleStyle);
+                        continue;
+                    }
+                    if ("boolean".equals(type)) {
+                        cont.setCellType(Cell.CELL_TYPE_BOOLEAN);
+                        cont.setCellValue((Boolean) value);
+                        booleanStyle.setDataFormat(format.getFormat(propSetter.getFormat()));
+                        cont.setCellStyle(booleanStyle);
                     }
                 }
             }

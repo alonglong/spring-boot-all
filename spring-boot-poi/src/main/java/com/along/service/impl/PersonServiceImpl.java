@@ -49,24 +49,24 @@ public class PersonServiceImpl implements PersonService {
         // 设置导出的文件名
         String fileName = "用户信息_" + dayFormat.format(System.currentTimeMillis()) + ".xlsx";
         // 设置导出文件路径
-        String realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + fileName;
+        String realFile = "D:\\githubProjects\\spring-boot-all\\spring-boot-poi\\src\\main\\resources\\export" + File.separator + fileName;
         // 验证
         fileOperate(realFile);
 
         // 导出简单excel
-        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "简单Excel_" + fileName;
+        realFile = "D:\\githubProjects\\spring-boot-all\\spring-boot-poi\\src\\main\\resources\\export" + File.separator + "简单Excel_" + fileName;
         createExcelPersons(realFile);
 
         //导出复杂excel(二级)
-        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "两层表头Excel_" + fileName;
+        realFile = "D:\\githubProjects\\spring-boot-all\\spring-boot-poi\\src\\main\\resources\\export" + File.separator + "两层表头Excel_" + fileName;
         createTwoMapExcel(realFile);
 
         //导出复杂excel(三级)
-        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "三级表头Excel_" + fileName;
+        realFile = "D:\\githubProjects\\spring-boot-all\\spring-boot-poi\\src\\main\\resources\\export" + File.separator + "三级表头Excel_" + fileName;
         createThreeMapExcel(realFile);
 
         //导出复杂excel(任意)
-        realFile = "spring-boot-poi\\src\\main\\resources\\export" + File.separator + "任意层表头Excel_" + fileName;
+        realFile = "D:\\githubProjects\\spring-boot-all\\spring-boot-poi\\src\\main\\resources\\export" + File.separator + "任意层表头Excel_" + fileName;
         createAnyMapExcel(realFile);
 
         return fileName;
@@ -80,7 +80,7 @@ public class PersonServiceImpl implements PersonService {
      */
     private void createExcelPersons(String realFile) throws IOException {
         CreateExcel<Person> createExcel = new CreateExcel<>();
-        logger.info("开始导出[全量用户信息]");
+        logger.info("开始导出[简单][全量用户信息]");
         // 获取数据
         List<Person> data = personMapper.selectByExample(new PersonExample());
         List<CellSetter> cellSetter = new ArrayList<>();
@@ -96,7 +96,7 @@ public class PersonServiceImpl implements PersonService {
         OutputStream outputStream = new FileOutputStream(realFile);
         SXSSFWorkbook workbook = createExcel.create(cellSetter, data, "全量用户信息");
         workbook.write(outputStream);
-        logger.info("[全量用户信息]导出成功");
+        logger.info("[简单][全量用户信息]导出成功");
         outputStream.flush();
         outputStream.close();
     }
@@ -121,7 +121,7 @@ public class PersonServiceImpl implements PersonService {
      * @param realFile 导出文件的路径
      */
     private void createTwoMapExcel(String realFile) throws Exception {
-        logger.info("开始导出[全量用户信息]");
+        logger.info("开始导出[两层][全量用户信息]");
 
         //参数设置
         List<PropSetter> props = new ArrayList<>();
@@ -178,7 +178,7 @@ public class PersonServiceImpl implements PersonService {
         OutputStream outputStream = new FileOutputStream(realFile);
         SXSSFWorkbook workbook = CreateTwoMapExcel.create(mapList, props, fps, "全量用户信息");
         workbook.write(outputStream);
-        logger.info("用户全量数据导出成功");
+        logger.info("[两层][用户全量数据]导出成功");
         outputStream.flush();
         outputStream.close();
     }
@@ -209,7 +209,7 @@ public class PersonServiceImpl implements PersonService {
      * @param realFile 导出文件的路径
      */
     private void createThreeMapExcel(String realFile) throws Exception {
-        logger.info("开始导出[全量用户信息]");
+        logger.info("开始导出[三层][全量用户信息]");
 
         //参数设置
         List<PropSetter> props = new ArrayList<>();
@@ -217,20 +217,20 @@ public class PersonServiceImpl implements PersonService {
         props.add(new PropSetter("姓名", null, null, "name", "String", "G/通用格式", 4000));
         props.add(new PropSetter("年龄", null, null, "age", "Long", "0", 4000));
         props.add(new PropSetter("地址", null, null, "address", "String", "G/通用格式", 4000));
-        props.add(new PropSetter("生日", null, null, "birth", "String", "G/通用格式", 4000));
+        props.add(new PropSetter("生日", null, null, "birth", "date", "yyyy-MM-dd", 4000));
         props.add(new PropSetter("创建日期", null, null, "created", "date", "yyyy-MM-dd HH:mm:ss", 4000));
         props.add(new PropSetter("更新日期", null, null, "updated", "date", "yyyy-MM-dd HH:mm:ss", 4000));
         props.add(new PropSetter("编号+姓名", "编号", null, "id", "Long", "0", 4000));
         props.add(new PropSetter("编号+姓名", "姓名", null, "name", "String", "G/通用格式", 4000));
         props.add(new PropSetter("年龄+地址", "年龄", null, "age", "Long", "0", 4000));
-        props.add(new PropSetter("年龄+地址", "地址", null, "address", "Long", "0", 4000));
+        props.add(new PropSetter("年龄+地址", "地址", null, "address", "String", "G/通用格式", 4000));
         props.add(new PropSetter("生日+创建日期+更新日期", "生日", null, "birth", "date", "yyyy-MM-dd", 4000));
         props.add(new PropSetter("生日+创建日期+更新日期", "创建日期", null, "created", "date", "yyyy-MM-dd HH:mm:ss", 4000));
         props.add(new PropSetter("生日+创建日期+更新日期", "更新日期", null, "updated", "date", "yyyy-MM-dd HH:mm:ss", 4000));
         props.add(new PropSetter("编号+姓名+年龄+地址", "编号+姓名", "编号", "id", "Long", "0", 4000));
-        props.add(new PropSetter("编号+姓名+年龄+地址", "编号+姓名", "姓名", "id", "Long", "0", 4000));
+        props.add(new PropSetter("编号+姓名+年龄+地址", "编号+姓名", "姓名", "name", "String", "G/通用格式", 4000));
         props.add(new PropSetter("编号+姓名+年龄+地址", "年龄+地址", "年龄", "age", "Long", "0", 4000));
-        props.add(new PropSetter("编号+姓名+年龄+地址", "年龄+地址", "地址", "address", "address", "G/通用格式", 4000));
+        props.add(new PropSetter("编号+姓名+年龄+地址", "年龄+地址", "地址", "address", "String", "G/通用格式", 4000));
 
 
         //设置要合并单元格坐标值,可以用for循环写，这里每条举例是为了看的清晰
@@ -272,7 +272,7 @@ public class PersonServiceImpl implements PersonService {
         OutputStream outputStream = new FileOutputStream(realFile);
         SXSSFWorkbook workbook = CreateThreeMapExcel.create(mapList, props, fps, "全量用户信息");
         workbook.write(outputStream);
-        logger.info("用户全量数据导出成功");
+        logger.info("[三层][用户全量数据]导出成功");
         outputStream.flush();
         outputStream.close();
     }
@@ -283,7 +283,7 @@ public class PersonServiceImpl implements PersonService {
      * @param realFile 导出文件的路径
      */
     private void createAnyMapExcel(String realFile) throws Exception {
-        logger.info("开始导出[全量用户信息]");
+        logger.info("开始导出[任意层][全量用户信息]");
 
         //参数设置
         List<MoreSetter> props = new ArrayList<>();
@@ -293,20 +293,20 @@ public class PersonServiceImpl implements PersonService {
         props.add(new MoreSetter(Arrays.asList("姓名", null, null), "name", "String", "G/通用格式", 4000));
         props.add(new MoreSetter(Arrays.asList("年龄", null, null), "age", "Long", "0", 4000));
         props.add(new MoreSetter(Arrays.asList("地址", null, null), "address", "String", "G/通用格式", 4000));
-        props.add(new MoreSetter(Arrays.asList("生日", null, null), "birth", "String", "G/通用格式", 4000));
+        props.add(new MoreSetter(Arrays.asList("生日", null, null), "birth", "date", "yyyy-MM-dd", 4000));
         props.add(new MoreSetter(Arrays.asList("创建日期", null, null), "created", "date", "yyyy-MM-dd HH:mm:ss", 4000));
         props.add(new MoreSetter(Arrays.asList("更新日期", null, null), "updated", "date", "yyyy-MM-dd HH:mm:ss", 4000));
         props.add(new MoreSetter(Arrays.asList("编号+姓名", "编号", null), "id", "Long", "0", 4000));
         props.add(new MoreSetter(Arrays.asList("编号+姓名", "姓名", null), "name", "String", "G/通用格式", 4000));
         props.add(new MoreSetter(Arrays.asList("年龄+地址", "年龄", null), "age", "Long", "0", 4000));
-        props.add(new MoreSetter(Arrays.asList("年龄+地址", "地址", null), "address", "Long", "0", 4000));
+        props.add(new MoreSetter(Arrays.asList("年龄+地址", "地址", null), "address", "String", "G/通用格式", 4000));
         props.add(new MoreSetter(Arrays.asList("生日+创建日期+更新日期", "生日", null), "birth", "date", "yyyy-MM-dd", 4000));
         props.add(new MoreSetter(Arrays.asList("生日+创建日期+更新日期", "创建日期", null), "created", "date", "yyyy-MM-dd HH:mm:ss", 4000));
         props.add(new MoreSetter(Arrays.asList("生日+创建日期+更新日期", "更新日期", null), "updated", "date", "yyyy-MM-dd HH:mm:ss", 4000));
         props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址", "编号+姓名", "编号"), "id", "Long", "0", 4000));
-        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址", "编号+姓名", "姓名"), "id", "Long", "0", 4000));
+        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址", "编号+姓名", "姓名"), "name", "String", "G/通用格式", 4000));
         props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址", "年龄+地址", "年龄"), "age", "Long", "0", 4000));
-        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址", "年龄+地址", "地址"), "address", "address", "G/通用格式", 4000));
+        props.add(new MoreSetter(Arrays.asList("编号+姓名+年龄+地址", "年龄+地址", "地址"), "address", "String", "G/通用格式", 4000));
 
 
         //设置要合并单元格坐标值,可以用for循环写，这里每条举例是为了看的清晰
@@ -348,7 +348,7 @@ public class PersonServiceImpl implements PersonService {
         OutputStream outputStream = new FileOutputStream(realFile);
         SXSSFWorkbook workbook = CreateMoreMapExcel.create(mapList, props, fps, "全量用户信息");
         workbook.write(outputStream);
-        logger.info("用户全量数据导出成功");
+        logger.info("[任意层][用户全量数据]导出成功");
         outputStream.flush();
         outputStream.close();
     }
