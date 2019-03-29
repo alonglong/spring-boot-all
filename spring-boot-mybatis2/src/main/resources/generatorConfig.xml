@@ -4,10 +4,13 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <!--
+        id="MysqlTables", MYSQL
+        id="OracleTables", ORACLE
         targetRuntime="MyBatis3", 生成 Example相关类及方法
-        targetRuntime="MyBatis3Simple",不生成 Example相关类及方法
+        targetRuntime="MyBatis3Simple", 不生成 Example相关类及方法
     -->
     <context id="MysqlTables" targetRuntime="MyBatis3">
+
         <!-- 指定生成 Mapper 的继承模板 -->
         <!--<plugin type="tk.mybatis.mapper.generator.MapperPlugin">
             <property name="mappers" value="" />
@@ -19,47 +22,66 @@
         <!-- 生成 JavaBean 对象重写 equals 和 hashCode 方法 -->
         <!--<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />-->
 
+        <!-- 屏蔽注释信息 -->
         <commentGenerator>
+            <!-- 阻止生成的注释包含时间戳,默认为false-->
             <property name="suppressDate" value="true"/>
-            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <!-- 是否去除自动生成的注释,默认为false-->
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
+
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="jdbc:mysql://127.0.0.1/test?useSSL=false&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;rewriteBatchedStatements=TRUE&amp;serverTimezone=UTC"
                         userId="root"
                         password="root">
         </jdbcConnection>
+
+        <!-- 指定JDBC类型和Java类型如何转换 -->
         <javaTypeResolver>
-            <!-- 默认false，把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer，为 true时把JDBC DECIMAL 和
-                NUMERIC 类型解析为java.math.BigDecimal -->
+            <!-- 默认false,默认情况下的转换规则为：
+                    1.如果精度>0或者长度>18，就会使用java.math.BigDecimal
+                    2.如果精度=0并且10<=长度<=18，就会使用java.lang.Long
+                    3.如果精度=0并且5<=长度<=9，就会使用java.lang.Integer
+                    4.如果精度=0并且长度<5，就会使用java.lang.Short
+                 如果设置为true，那么一定会使用java.math.BigDecimal -->
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
+
         <!-- 生成模型的包名和位置-->
         <javaModelGenerator targetPackage="com.along.entity" targetProject="src/main/java">
+            <!--如果true，MBG会根据catalog和schema来生成子包。如果false就会直接用targetPackage属性。默认为false-->
             <property name="enableSubPackages" value="true"/>
+            <!--是否对数据库查询结果进行trim操作,默认值为false-->
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
         <!-- 生成映射文件的包名和位置-->
         <sqlMapGenerator targetPackage="com.along.dao" targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
-        <!--
-            生成DAO的包名和位置
-            type="ANNOTATEDMAPPER", 生成Java Model 和基于注解的Mapper对象
-            type="MIXEDMAPPER", 生成基于注解的Java Model 和相应的Mapper对象
-            type="XMLMAPPER", 生成SQLMap XML文件和独立的Mapper接口
-        -->
+        <!-- 生成DAO的包名和位置
+             type="ANNOTATEDMAPPER", 生成Java Model 和基于注解的Mapper对象
+             type="MIXEDMAPPER", 生成基于注解的Java Model 和相应的Mapper对象
+             type="XMLMAPPER", 生成SQLMap XML文件和独立的Mapper接口 -->
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.along.dao" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
+
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->
         <table tableName="person" domainObjectName="Person">
+            <!--这会配置MBG使用MyBatis3支持的JDBC标准的生成key来生成代码。 这是一个独立于数据库获取标识列中的值的方法。
+                重要: 只有当目标运行为MyBatis3时才会产生正确的代码。 如果与iBATIS2一起使用目标运行时会产生运行时错误的代码。-->
             <!--<generatedKey column="id" sqlStatement="JDBC" identity="true"/>-->
+
             <!-- Mysql 配置 -->
             <generatedKey column="id" sqlStatement="Mysql" identity="true" />
+
             <!-- Oracle 配置 -->
             <!-- <generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from dual" identity="false" type="pre"/> -->
+
+            <!-- 指定字段转换类型,按具体需要配置 -->
+            <columnOverride column="id" javaType="java.lang.Long" />
+            <columnOverride column="age" javaType="java.lang.Integer" />
         </table>
         <!--<table tableName="person" domainObjectName="Person"
                enableCountByExample="false" enableUpdateByExample="false"
