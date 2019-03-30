@@ -4,17 +4,9 @@ import com.along.model.entity.User;
 import com.along.model.vo.UserVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-<<<<<<< HEAD
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
-=======
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
->>>>>>> d467cc7c96c74e6209e82f3ddde527399745ca5c
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.List;
 
@@ -148,5 +140,7 @@ public interface UserDao extends JpaRepository<User, String>, JpaSpecificationEx
     @Query("update user u set u.password = ?1 where u.id = ?2")
     Integer updatePasswordById(String password, String id);
 
+    @Query("select u from User u where u.name like concat('%',:name,'%') and u.sex = :sex")
+    List<User> findUserByNameAndSex(@Param("name") String name, @Param("sex") Integer sex);
 
 }

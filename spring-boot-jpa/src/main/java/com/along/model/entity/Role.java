@@ -15,11 +15,11 @@ import java.util.Set;
 // EntityGraph(实体图)使用演示，解决查询N+1问题
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "role.all",
-                attributeNodes = { // attributeNodes 用来定义需要懒加载的属性
-                        @NamedAttributeNode(value = "users", subgraph = "articleList"), // 要懒加载users属性中的articleList元素
+                attributeNodes = { // attributeNodes 用来指定要立即加载的节点，节点用 @NamedAttributeNode 定义
+                        @NamedAttributeNode(value = "users", subgraph = "userWithArticleList"), // 要立即加载users属性中的articleList元素
                 },
-                subgraphs = { // subgraphs 用来定义关联对象的属性,也就是对上面的 articleList 进行描述
-                        @NamedSubgraph(name = "articleList", attributeNodes = @NamedAttributeNode("articleList")), // 一层延伸
+                subgraphs = { // subgraphs 用来定义关联对象的属性,也就是对上面的 userWithArticleList 进行描述
+                        @NamedSubgraph(name = "userWithArticleList", attributeNodes = @NamedAttributeNode("articleList")), // 一层延伸
                 }
         ),
 })

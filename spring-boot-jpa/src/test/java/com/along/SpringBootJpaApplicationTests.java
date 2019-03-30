@@ -2,6 +2,8 @@ package com.along;
 
 import com.along.dao.UserDao;
 import com.along.model.entity.User;
+import com.along.model.vo.UserVo;
+import com.along.service.UserService;
 import org.assertj.core.internal.bytebuddy.matcher.StringMatcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +28,9 @@ public class SpringBootJpaApplicationTests {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private UserService userService;
 
     @Test
     public void test() {
@@ -86,6 +91,19 @@ public class SpringBootJpaApplicationTests {
 
 
     }
+
+    @Test
+    public void queryTest() {
+//        List<User> userList = userService.findUserByNameAndSex0("along",1);
+//        List<User> userList = userDao.findAll();
+//        List<User> userList = userDao.findUserByNameAndSex("along", 1);
+        List<User> userList = userService.findUserByArticleAndRole("5f69fb9d-c42b-4b39-abb3-109723d97b10", "692b6903-74ce-4c12-b519-470cbb255c29");
+        System.out.println(userList.size());
+        for (User user : userList) {
+            System.out.println(user.getName());
+        }
+    }
+
 
 }
 

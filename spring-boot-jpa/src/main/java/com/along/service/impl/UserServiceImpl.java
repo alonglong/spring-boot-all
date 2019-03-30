@@ -3,6 +3,7 @@ package com.along.service.impl;
 import com.along.dao.RoleDao;
 import com.along.dao.UserDao;
 import com.along.model.dto.UserDTO;
+import com.along.model.entity.Article;
 import com.along.model.entity.Role;
 import com.along.model.entity.User;
 import com.along.model.vo.UserVo;
@@ -13,16 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
-import javax.persistence.FlushModeType;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.*;
@@ -123,6 +121,12 @@ public class UserServiceImpl implements UserService {
         return userVos;
     }
 
+    @Override
+    public List<User> findByName(String name) {
+        List<User> users = userDao.findByName(name);
+        return users;
+    }
+
     /**
      * 更新
      *
@@ -181,6 +185,27 @@ public class UserServiceImpl implements UserService {
     }
 
     // ---------------------使用Specifications动态构建查询：
+    @Override
+    public List<User> findUserByNameAndSex0(String name, Integer sex) {
+        // 1. 构建出CriteriaQuery类型的参数
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> query = builder.createQuery(User.class);
+        // 2. 获取User的Root，也就是包装对象
+        Root<User> root = query.from(User.class);
+        // 3. 构建查询条件，这里相当于where user.id = id;
+        Predicate predicate = builder.and(
+                builder.like(root.get("name").as(String.class), "%" + name + "%"),
+                builder.equal(root.get("sex").as(Integer.class), sex)
+        );
+        query.where(predicate); // 到这里一个完整的动态查询就构建完成了
+        // 指定查询结果集，相当于“select id，name...”，如果不设置，默认查询root中所有字段
+        query.select(root);
+        // 5. 执行查询,获取查询结果
+        TypedQuery<User> typeQuery = entityManager.createQuery(query);
+        List<User> resultList = typeQuery.getResultList();
+
+        return resultList;
+    }
 
     /**
      * 根据name查询
@@ -251,6 +276,68 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findUserByIds(List<String> ids) {
         return userDao.findAll((Specification<User>) (root, query, criteriaBuilder) -> root.in(ids));
+    }
+
+    /**
+     * 动态语句查询
+     *
+     * @param user
+     * @return
+     */
+    @Override
+    public Page<User> findUser(User user, int page, int size) {
+        Sort sort = new Sort(Sort.Direction.DESC, "updateTime", "createTime");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return userDao.findAll(new Specification<User>() {
+            @Override
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicateList = new ArrayList<>();
+
+                if (!StringUtils.isEmpty(user.getId())) {
+                    predicateList.add(criteriaBuilder.equal(root.get("id"), user.getId()));
+                }
+                if (!StringUtils.isEmpty(user.getName())) {
+                    predicateList.add(criteriaBuilder.like(root.get("name"), user.getName()));
+                }
+                if (null != user.getCreateTime()) {
+                    predicateList.add(criteriaBuilder.greaterThan(root.get("createTime"), user.getCreateTime()));
+                }
+                if (null != user.getUpdateTime()) {
+                    predicateList.add(criteriaBuilder.lessThanOrEqualTo(root.get("updateTime"), user.getUpdateTime()));
+                }
+
+                Predicate[] predicateArr = new Predicate[predicateList.size()];
+                return criteriaBuilder.and(predicateList.toArray(predicateArr));
+            }
+        }, pageable);
+    }
+
+
+    /**
+     * 表关联查询
+     * @param articleId
+     * @param roleId
+     * @return
+     */
+    public List<User> findUserByArticleAndRole(String articleId, String roleId) {
+        return userDao.findAll(new Specification<User>() {
+            @Override
+            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                // 方式1
+                ListJoin<User, Article> articleJoin = root.join(root.getModel().getList("articleList", Article.class), JoinType.LEFT);
+                SetJoin<User, Role> roleJoin = root.join(root.getModel().getSet("roles", Role.class), JoinType.LEFT);
+                // 方式2
+                //Join<User, Article> articleJoin = root.join("articleList", JoinType.LEFT);
+                //Join<User, Role> roleJoin = root.join("roles", JoinType.LEFT);
+
+                Predicate predicate = criteriaBuilder.and(
+                        criteriaBuilder.equal(articleJoin.get("id"), articleId),
+                        criteriaBuilder.equal(roleJoin.get("id"), roleId)
+                );
+                return predicate;
+            }
+        });
+
     }
 
 

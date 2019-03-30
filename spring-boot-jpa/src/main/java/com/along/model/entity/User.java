@@ -19,7 +19,7 @@ import java.util.Set;
 //EntityGraph(实体图)使用演示，解决查询N+1问题
 @NamedEntityGraphs({
         @NamedEntityGraph(name = "user.all",
-                attributeNodes = { // attributeNodes 用来定义需要懒加载的属性
+                attributeNodes = { // attributeNodes 用来定义需要立即加载的属性
                         @NamedAttributeNode("articleList"), // 无延伸
                         @NamedAttributeNode("roles"), // 无延伸
                 }

@@ -3,11 +3,9 @@ package com.along.service;
 import com.along.model.dto.UserDTO;
 import com.along.model.entity.User;
 import com.along.model.vo.UserVo;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 /**
@@ -27,9 +25,13 @@ public interface UserService {
 
     List<UserVo> findByNameLike(String name);
 
+    List<User> findByName(String name);
+
     Boolean update(UserDTO user);
 
     void delete(String id);
+
+    public List<User> findUserByNameAndSex0(String name, Integer sex);
 
     List<User> findUserByName(String name);
 
@@ -38,6 +40,10 @@ public interface UserService {
     List<User> findUserByNameAndSex2(String name, Integer sex);
 
     List<User> findUserByIds(List<String> ids);
+
+    Page<User> findUser(User user, int page, int size);
+
+    List<User> findUserByArticleAndRole(String articleId, String roleId);
 
 
 }

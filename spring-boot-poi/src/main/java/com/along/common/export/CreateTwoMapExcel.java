@@ -9,6 +9,7 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public class CreateTwoMapExcel {
         SXSSFWorkbook workbook = new SXSSFWorkbook();
         Sheet sheet = workbook.createSheet();
         workbook.setSheetName(0, sheetName);
+        DataFormat format = workbook.createDataFormat();
 
         Font titleFont = workbook.createFont();
         titleFont.setFontName("微软雅黑");
@@ -94,18 +96,53 @@ public class CreateTwoMapExcel {
                 row.setHeight((short) 310);
                 for (int i = 0; i < props.size(); i++) {
                     Cell cont = row.createCell(i);
-                    Object value = datas.get(m).get(props.get(i).getProp());
+                    PropSetter propSetter = props.get(i);
+                    Object value = datas.get(m).get(propSetter.getProp());
                     if (value == null) {
                         cont.setCellValue("");
-//						cont.setCellType(HSSFCell.CELL_TYPE_STRING);
                         cont.setCellStyle(stringStyle);
-                    } else if (props.get(i).getRender() != null) {
-                        cont.setCellType(HSSFCell.CELL_TYPE_STRING);
+                        continue;
+                    }
+                    if (propSetter.getRender() != null) {
+                        cont.setCellType(Cell.CELL_TYPE_STRING);
+                        cont.setCellValue(propSetter.getRender().view(value));
                         cont.setCellStyle(stringStyle);
-                        cont.setCellValue(props.get(i).getRender().view(value));
-                    } else {
-                        cont.setCellType(HSSFCell.CELL_TYPE_STRING);
-                        cont.setCellValue(String.valueOf(value));
+                        continue;
+                    }
+                    String type = propSetter.getType().trim().toLowerCase();
+                    if ("string".equals(type) || "char".equals(type)) {
+                        cont.setCellType(Cell.CELL_TYPE_STRING);
+                        cont.setCellValue(value.toString());
+                        stringStyle.setDataFormat(format.getFormat(propSetter.getFormat()));
+                        cont.setCellStyle(stringStyle);
+                        continue;
+                    }
+                    if ("date".equals(type)) {
+                        cont.setCellType(Cell.CELL_TYPE_NUMERIC);
+                        cont.setCellValue((Date) value);
+                        stringStyle.setDataFormat(format.getFormat(propSetter.getFormat()));
+                        cont.setCellStyle(stringStyle);
+                        continue;
+                    }
+                    if ("long".equals(type) || "int".equals(type)
+                            || "byte".equals(type) || "short".equals(type)) {
+                        cont.setCellType(Cell.CELL_TYPE_NUMERIC);
+                        cont.setCellValue(Long.valueOf(value.toString()));
+                        stringStyle.setDataFormat(format.getFormat(propSetter.getFormat()));
+                        cont.setCellStyle(stringStyle);
+                        continue;
+                    }
+                    if ("double".equals(type) || "float".equals(type)) {
+                        cont.setCellType(Cell.CELL_TYPE_NUMERIC);
+                        cont.setCellValue(Double.parseDouble(value.toString()));
+                        stringStyle.setDataFormat(format.getFormat(propSetter.getFormat()));
+                        cont.setCellStyle(stringStyle);
+                        continue;
+                    }
+                    if ("boolean".equals(type)) {
+                        cont.setCellType(Cell.CELL_TYPE_BOOLEAN);
+                        cont.setCellValue((Boolean) value);
+                        stringStyle.setDataFormat(format.getFormat(propSetter.getFormat()));
                         cont.setCellStyle(stringStyle);
                     }
                 }
