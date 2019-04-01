@@ -43,12 +43,21 @@ public class PersonController {
 
     }
 
+    // 带字时间的文件组装
     private String getUrlCode(String fileName) throws UnsupportedEncodingException {
         String tmp = fileName.replace("export/", "");
         String[] fs = tmp.split("\\^");
         tmp = fs[0] + fs[2];
         tmp = "servletExportUtil/" + "export" + File.separator + URLEncoder.encode(tmp, "utf-8")
                 + "?timeId=" + fs[1];
+        return tmp;
+    }
+
+    // 不带时间的文件组装
+    protected String getUrlCodeCommon(String fileName)
+            throws UnsupportedEncodingException {
+        String tmp = fileName.replace("export/", "");
+        tmp = "servletExportUtil/" + "export" + File.separator + URLEncoder.encode(tmp, "utf-8");
         return tmp;
     }
 
