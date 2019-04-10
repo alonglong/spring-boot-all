@@ -4,9 +4,8 @@ import com.along.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +30,12 @@ public class PersonController {
         this.personService = personService;
     }
 
+    /**
+     * 导出
+     *
+     * @return
+     * @throws Exception
+     */
     @GetMapping("export")
     public String exportPersons() throws Exception {
         logger.info("导出[全量用户信息]");
@@ -41,6 +46,24 @@ public class PersonController {
         logger.info("组装后的文件名称: {}", tmp);
         return tmp;
 
+    }
+
+    /**
+     * excel导入 入库
+     *
+     * @param file
+     * @return
+     */
+    @PostMapping("/upload")
+    public boolean uploadExcel(@RequestParam("file") MultipartFile file) throws IOException {
+        boolean a = false;
+        String fileName = file.getOriginalFilename();
+        try {
+            a = personService.batchImport(fileName, file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return a;
     }
 
     // 带字时间的文件组装
@@ -54,8 +77,7 @@ public class PersonController {
     }
 
     // 不带时间的文件组装
-    protected String getUrlCodeCommon(String fileName)
-            throws UnsupportedEncodingException {
+    private String getUrlCodeCommon(String fileName) throws UnsupportedEncodingException {
         String tmp = fileName.replace("export/", "");
         tmp = "servletExportUtil/" + "export" + File.separator + URLEncoder.encode(tmp, "utf-8");
         return tmp;

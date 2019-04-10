@@ -1,23 +1,28 @@
 package com.along.service.impl;
 
+import com.along.common.exception.MyException;
 import com.along.common.export.*;
 import com.along.dao.PersonMapper;
 import com.along.entity.Person;
 import com.along.entity.PersonExample;
 import com.along.service.PersonService;
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -27,7 +32,7 @@ import java.util.*;
  * @Date 2018/12/28 17:44
  */
 @Service(value = "personService")
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class PersonServiceImpl implements PersonService {
 
     private final Logger logger = LoggerFactory.getLogger(PersonServiceImpl.class);
@@ -70,6 +75,99 @@ public class PersonServiceImpl implements PersonService {
         createAnyMapExcel(realFile);
 
         return fileName;
+    }
+
+    @Override
+    public boolean batchImport(String fileName, MultipartFile file) throws Exception {
+
+        List<Person> personList = new ArrayList<>();
+        if (!fileName.matches("^.+\\.(?i)(xls)$")
+                && !fileName.matches("^.+\\.(?i)(xlsx)$")) {
+            throw new MyException("上传文件格式不正确");
+        }
+        boolean isExcel2003 = true;
+        if (fileName.matches("^.+\\.(?i)(xlsx)$")) {
+            isExcel2003 = false;
+        }
+        InputStream is = file.getInputStream();
+
+        // 1.创建HSSFWorkbook或XSSFWorkbook对象
+        Workbook wb;
+        if (isExcel2003) {
+            wb = new HSSFWorkbook(is);
+        } else {
+            wb = new XSSFWorkbook(is);
+        }
+
+        // 简单需求演示，获取第一个sheet
+        Sheet sheet = wb.getSheetAt(0);
+        if (sheet == null) {
+            return false;
+        }
+        for (int r = 1; r <= sheet.getLastRowNum(); r++) {
+            Row row = sheet.getRow(r);
+            if (row == null) {
+                continue;
+            }
+            Person person = new Person();
+
+            // name
+            if (row.getCell(0).getCellType() != Cell.CELL_TYPE_STRING) {
+                throw new MyException("导入失败(第" + (r + 1) + "行,姓名请设为文本格式)");
+            }
+            String name = row.getCell(0).getStringCellValue();
+            if (name == null || name.isEmpty()) {
+                throw new MyException("导入失败(第" + (r + 1) + "行,姓名未填写)");
+            }
+
+            // age
+            row.getCell(1).setCellValue(Cell.CELL_TYPE_STRING);
+            String age = row.getCell(1).getStringCellValue();
+            if (age == null || age.isEmpty()) {
+                throw new MyException("导入失败(第" + (r + 1) + "行,年龄未填写)");
+            }
+
+            // address
+            if (row.getCell(2).getCellType() != Cell.CELL_TYPE_STRING) {
+                throw new MyException("导入失败(第" + (r + 1) + "行,地址请设为文本格式)");
+            }
+            String address = row.getCell(2).getStringCellValue();
+            if (address == null || address.isEmpty()) {
+                throw new MyException("导入失败(第" + (r + 1) + "行,不存在此单位或单位未填写)");
+            }
+
+            // 这里是为了做日期类型的演示
+            Date date;
+            if (row.getCell(3).getCellType() != Cell.CELL_TYPE_NUMERIC) {
+                throw new MyException("导入失败(第" + (r + 1) + "行,生日格式不正确或未填写)");
+            } else {
+                date = row.getCell(3).getDateCellValue();
+            }
+
+            person.setName(name);
+            person.setAge(Integer.parseInt(age));
+            person.setAddress(address);
+
+            personList.add(person);
+        }
+
+        // 数据入库
+        for (Person personResord : personList) {
+            String name = personResord.getName();
+            PersonExample personExample = new PersonExample();
+            personExample.or()
+                    .andNameEqualTo(name);
+            List<Person> persons = personMapper.selectByExample(personExample);
+            if (persons.size() == 0) {
+                personMapper.insert(personResord);
+                System.out.println(" 插入 " + personResord);
+            } else {
+                personMapper.updateByExampleSelective(personResord, personExample);
+                System.out.println(" 更新 " + personResord);
+            }
+        }
+
+        return true;
     }
 
     /**

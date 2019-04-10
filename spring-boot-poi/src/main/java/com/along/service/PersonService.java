@@ -1,6 +1,6 @@
 package com.along.service;
 
-import java.io.IOException;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @Description: service接口
@@ -13,7 +13,15 @@ public interface PersonService {
     /**
      * 全量数据导出
      */
-    String exportPersons() throws IOException, Exception;
+    String exportPersons() throws Exception;
 
 
+    /**
+     * excel文件解析，批量导入数据库
+     *
+     * @param fileName
+     * @param file
+     * @return
+     */
+    boolean batchImport(String fileName, MultipartFile file) throws Exception;
 }
