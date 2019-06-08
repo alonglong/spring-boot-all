@@ -66,20 +66,20 @@ public class PersonController {
         return a;
     }
 
-    // 带字时间的文件组装
+    // 带字时间的文件组装,fileName = 三级表头Excel_用户信息_20190222^20190222171649^.xlsx
     private String getUrlCode(String fileName) throws UnsupportedEncodingException {
         String tmp = fileName.replace("export/", "");
         String[] fs = tmp.split("\\^");
-        tmp = fs[0] + fs[2];
-        tmp = "servletExportUtil/" + "export" + File.separator + URLEncoder.encode(tmp, "utf-8")
-                + "?timeId=" + fs[1];
+        tmp = fs[0] + fs[2]; // 三级表头Excel_用户信息_20190222.xlsx
+        tmp = "ftp/download/" + "export" + File.separator + URLEncoder.encode(tmp, "utf-8")
+                + "?timeId=" + fs[1]; // 结果样例：ftp/download/export/三级表头Excel_用户信息_20190222.xlsx?timeId=20190222171649
         return tmp;
     }
 
     // 不带时间的文件组装
     private String getUrlCodeCommon(String fileName) throws UnsupportedEncodingException {
         String tmp = fileName.replace("export/", "");
-        tmp = "servletExportUtil/" + "export" + File.separator + URLEncoder.encode(tmp, "utf-8");
+        tmp = "ftp/download/" + "export" + File.separator + URLEncoder.encode(tmp, "utf-8");
         return tmp;
     }
 

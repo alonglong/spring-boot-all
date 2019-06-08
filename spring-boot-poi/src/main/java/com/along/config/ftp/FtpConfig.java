@@ -35,17 +35,12 @@ public class FtpConfig {
     /**
      * 基本路径
      */
-    private String ftp_basepath;
+    private String ftp_basePath;
 
     /**
      * 报表导出
      */
     private String ftp_export;
-
-    /**
-     * 知识库
-     */
-    private String ftp_knowledge;
 
     public String getFtp_address() {
         return ftp_address;
@@ -79,12 +74,12 @@ public class FtpConfig {
         this.ftp_password = ftp_password;
     }
 
-    public String getFtp_basepath() {
-        return ftp_basepath;
+    public String getFtp_basePath() {
+        return ftp_basePath;
     }
 
-    public void setFtp_basepath(String ftp_basepath) {
-        this.ftp_basepath = ftp_basepath;
+    public void setFtp_basePath(String ftp_basePath) {
+        this.ftp_basePath = ftp_basePath;
     }
 
     public String getFtp_export() {
@@ -95,11 +90,4 @@ public class FtpConfig {
         this.ftp_export = ftp_export;
     }
 
-    public String getFtp_knowledge() {
-        return ftp_knowledge;
-    }
-
-    public void setFtp_knowledge(String ftp_knowledge) {
-        this.ftp_knowledge = ftp_knowledge;
-    }
 }

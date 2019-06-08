@@ -4,10 +4,19 @@ spring:
 
 #ftp server info
 ftp:
-  ftp_address: 192.168.1.110
-  ftp_port: 21
+  ftp_address: 192.168.1.104
+  ftp_port: 22
   ftp_username: root
-  ftp_password: root
-  ftp_basepath: /
+  ftp_password: 159357
+  ftp_basePath: /root
   ftp_export: export
   ftp_knowledge: knowledge
+
+sftp:
+  privateKeyPath:
+  passphrase:
+  ip: 192.168.1.104
+  port: 22
+  username: root
+  pwd: 159357
+  basePath: /root

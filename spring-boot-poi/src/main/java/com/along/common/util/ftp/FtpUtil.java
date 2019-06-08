@@ -1,4 +1,4 @@
-package com.along.common.util;
+package com.along.common.util.ftp;
 
 import com.along.config.ftp.FtpConfig;
 import org.apache.commons.net.ftp.*;
@@ -49,10 +49,10 @@ public class FtpUtil {
 
         boolean flag = uploadFile(ftpConfig.getFtp_address(), ftpConfig.getFtp_port(),
                 ftpConfig.getFtp_username(), ftpConfig.getFtp_password(),
-                ftpConfig.getFtp_basepath(), fileSavePath, fileNewName, inputStream);
+                ftpConfig.getFtp_basePath(), fileSavePath, fileNewName, inputStream);
 
         if (flag) {
-            picHttpPath = ftpConfig.getFtp_basepath() + fileSavePath + "/" + fileNewName;
+            picHttpPath = ftpConfig.getFtp_basePath() + fileSavePath + "/" + fileNewName;
             logger.info("=== Successfully uploaded file to {}", ftpConfig.getFtp_address());
             logger.info("=== {}", picHttpPath);
             return picHttpPath;
@@ -279,7 +279,7 @@ public class FtpUtil {
             charsetConfig(ftp); // 字符集设置
 
             // 转移到FTP服务器目录
-            if (!ftp.changeWorkingDirectory(config.getFtp_basepath() + remotePath)) {
+            if (!ftp.changeWorkingDirectory(config.getFtp_basePath() + remotePath)) {
                 logger.info("未转移到FTP服务器目录");
                 ftp.disconnect();
                 return result;

@@ -1,4 +1,4 @@
-package com.along.common.util;
+package com.along.common.util.ftp;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
