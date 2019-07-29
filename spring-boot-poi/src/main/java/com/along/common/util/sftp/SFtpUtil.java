@@ -169,7 +169,7 @@ public class SFtpUtil {
      * @param filePath 文件夹路径
      * @return
      */
-    public static boolean isExist(ChannelSftp sftp, String filePath) {
+    private static boolean isExist(ChannelSftp sftp, String filePath) {
         String[] paths = filePath.split("\\/");
         String dir = paths[0];
         for (int i = 0; i < paths.length - 1; i++) {
@@ -181,7 +181,7 @@ public class SFtpUtil {
                     try {
                         sftp.mkdir(dir);
                     } catch (SftpException e) {
-                        e.printStackTrace();
+                        logger.info("", e);
                         return false;
                     }
                 }
