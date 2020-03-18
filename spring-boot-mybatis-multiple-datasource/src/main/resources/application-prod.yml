@@ -24,8 +24,10 @@ spring:
         time-between-eviction-runs-millis: 60000
         #一个连接在池中最小生存的时间
         min-evictable-idle-time-millis: 300000
+        #这是mysql数据库写法 如果是Oracle则应该写为：select 1 from dual
         validation-query: SELECT 'x'
         test-while-idle: true
+        #在获取连接的时候是否去检测这个连接是否正常工作,默认为true,这里设置为不检测
         test-on-borrow: false
         test-on-return: false
         #打开PSCache，并指定每个连接上PSCache的大小。oracle设为true，mysql设为false。分库分表较多推荐设置为false

@@ -63,6 +63,8 @@
         <module>spring-boot-poi</module>
         <!-- springboot整合jpa使用-->
         <module>spring-boot-jpa</module>
+        <!-- springboot整合swagger-->
+        <module>spring-boot-swagger</module>
 
     </modules>
 

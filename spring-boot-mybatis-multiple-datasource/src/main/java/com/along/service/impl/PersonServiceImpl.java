@@ -11,7 +11,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,7 +20,8 @@ import java.util.List;
  * @Date 2018/12/28 17:44
  */
 @Service(value = "personService")
-@Transactional
+//尝试解决mysql数据源切换到oracle数据源出错的问题，在类上加事务，需要时可尝试在方法上加事务
+//@Transactional
 public class PersonServiceImpl implements PersonService {
 
     private PersonMapper personMapper;
