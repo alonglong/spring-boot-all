@@ -67,6 +67,8 @@
         <module>spring-boot-swagger</module>
         <!-- springboot自定义启动类demo-->
         <module>along-spring-boot-starter</module>
+        <!-- rabbitmq -->
+        <module>spring-boot-rabbitmq</module>
 
     </modules>
 
