@@ -1,4 +1,4 @@
-package com.along.helloword;
+package com.along.basic.helloword;
 
 import com.along.utils.RabbitUtils;
 import com.rabbitmq.client.*;

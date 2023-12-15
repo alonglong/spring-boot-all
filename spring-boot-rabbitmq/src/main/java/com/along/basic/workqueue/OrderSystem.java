@@ -1,4 +1,4 @@
-package com.along.workqueue;
+package com.along.basic.workqueue;
 
 import com.alibaba.fastjson2.JSON;
 import com.along.utils.RabbitUtils;

@@ -1,4 +1,4 @@
-package com.along.pubsub;
+package com.along.basic.pubsub;
 
 import com.along.utils.RabbitUtils;
 import com.rabbitmq.client.Channel;

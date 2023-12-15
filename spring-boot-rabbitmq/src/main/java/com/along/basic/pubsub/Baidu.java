@@ -1,12 +1,11 @@
-package com.along.pubsub;
+package com.along.basic.pubsub;
 
 import com.along.utils.RabbitUtils;
 import com.rabbitmq.client.*;
 
 import java.io.IOException;
 
-import static com.along.utils.RabbitConstant.QUEUE_HELLOWORD;
-import static com.along.utils.RabbitConstant.QUEUE_SINA;
+import static com.along.utils.RabbitConstant.*;
 
 /**
  * @Description: TODO(这里用一句话描述这个类的作用)
@@ -18,14 +17,14 @@ public class Baidu {
         Connection connection = RabbitUtils.getConnection();
         Channel channel = connection.createChannel();
         // 声明队列信息
-        channel.queueDeclare("sina", false, false, false, null);
+        channel.queueDeclare(QUEUE_BAIDU, false, false, false, null);
         // 队列绑定交换机
         // 参数1:队列名称
         // 参数2:交换机名称
         // 参数3:路由key
-        channel.queueBind(QUEUE_SINA, QUEUE_HELLOWORD, "");
+        channel.queueBind(QUEUE_BAIDU, QUEUE_HELLOWORD, "");
         channel.basicQos(1);
-        channel.basicConsume(QUEUE_SINA, false, new DefaultConsumer(channel) {
+        channel.basicConsume(QUEUE_BAIDU, false, new DefaultConsumer(channel) {
 
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {

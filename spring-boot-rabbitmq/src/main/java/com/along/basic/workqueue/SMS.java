@@ -1,4 +1,4 @@
-package com.along.workqueue;
+package com.along.basic.workqueue;
 
 /**
  * @Description: TODO(这里用一句话描述这个类的作用)

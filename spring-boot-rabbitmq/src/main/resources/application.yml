@@ -1,2 +1,25 @@
 server:
   port: 8080
+
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: /
+    # 支持发布确认
+    publisher-confirms: true
+    # 支持发布返回
+    publisher-returns: true
+    listener:
+      simple:
+        #手动模式
+        acknowledge-mode: manual
+        #一次消费一条
+        concurrency: 1
+        #最大消费条数
+        max-concurrency: 1
+        retry:
+          # 支持重试
+          enabled: true
